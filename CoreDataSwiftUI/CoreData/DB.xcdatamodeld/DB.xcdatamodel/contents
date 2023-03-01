@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22A380" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Appetizer" representedClassName="Appetizer" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="toMeal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="toAppetizers" inverseEntity="Meal"/>
+        <relationship name="toRestaurant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Restaurant" inverseName="toAppetizer" inverseEntity="Restaurant"/>
+    </entity>
+    <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="toFood" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Food" inverseName="toCategory" inverseEntity="Food"/>
+    </entity>
+    <entity name="Drink" representedClassName="Drink" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="toMeal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="toDrinks" inverseEntity="Meal"/>
+        <relationship name="toRestaurant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Restaurant" inverseName="toDrink" inverseEntity="Restaurant"/>
+    </entity>
+    <entity name="Food" representedClassName="Food" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="toCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="toFood" inverseEntity="Category"/>
+        <relationship name="toMeal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="toFood" inverseEntity="Meal"/>
+        <relationship name="toRestaurant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Restaurant" inverseName="toFood" inverseEntity="Restaurant"/>
+    </entity>
+    <entity name="Meal" representedClassName="Meal" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="toAppetizers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Appetizer" inverseName="toMeal" inverseEntity="Appetizer"/>
+        <relationship name="toDrinks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Drink" inverseName="toMeal" inverseEntity="Drink"/>
+        <relationship name="toFood" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Food" inverseName="toMeal" inverseEntity="Food"/>
+    </entity>
+    <entity name="Restaurant" representedClassName="Restaurant" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="toAppetizer" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Appetizer" inverseName="toRestaurant" inverseEntity="Appetizer"/>
+        <relationship name="toDrink" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Drink" inverseName="toRestaurant" inverseEntity="Drink"/>
+        <relationship name="toFood" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Food" inverseName="toRestaurant" inverseEntity="Food"/>
+    </entity>
+</model>
