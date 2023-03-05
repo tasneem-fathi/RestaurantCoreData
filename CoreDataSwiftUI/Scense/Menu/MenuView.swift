@@ -12,7 +12,7 @@ struct MenuView: View {
     @State var selection : Int = 1
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Text("Restaurant Menu")
+            Text("Restaurants Menu")
                 .font(.title)
 
             Menu {

@@ -1,8 +1,8 @@
 //
-//  RestaurantData.swift
+//  RestaurantAPI.swift
 //  CoreDataSwiftUI
 //
-//  Created by tasneem .. on 27/02/2023.
+//  Created by tasneem .. on 03/03/2023.
 //
 
 import Foundation
@@ -15,35 +15,25 @@ protocol RestaurantCoreAPI {
 
 }
 
-struct RestaurantModel: Identifiable {
-    var id:Int
-    var name:String
 
-    var restaurantData : Restaurant? {
-        return CoreDataManager.instance.getItem(entityName: RestaurantAPI.entityName, id: id) as? Restaurant
-
-    }
-
-    static func toRestaurantModel(item : Restaurant) -> RestaurantModel{
-        return Self.init(id: Int(item.id), name: item.name ?? "")
-    }
-}
 
 class RestaurantAPI : RestaurantCoreAPI{
-
-
     let manager    = CoreDataManager.instance
-    static let entityName = "Restaurant"
+    let entityName = "Restaurant"
+    private var restaurants : [Restaurant] = []
+
+    init() {
+        restaurants = manager.getItems(entityName: entityName) as? [Restaurant] ?? []
+    }
 
     func getRestaurants() -> [RestaurantModel]{
-        let list = manager.getItems(entityName: RestaurantAPI.entityName) as? [Restaurant] ?? []
-       return list.map { item in
+       return restaurants.map { item in
            RestaurantModel.toRestaurantModel(item: item)
        }
     }
-   
+
     func isExists() -> Bool{
-        return manager.getItems(entityName: RestaurantAPI.entityName).count > 0
+        return restaurants.count > 0
     }
 
     func addRestaurant(item: RestaurantModel){
@@ -51,6 +41,13 @@ class RestaurantAPI : RestaurantCoreAPI{
         newItem.setValue(item.id, forKey: "id")
         newItem.setValue(item.name, forKey: "name")
         manager.save()
+    }
+
+}
+
+extension RestaurantAPI{
+    static func getRestaurant(id:Int) -> Restaurant?{
+        return CoreDataManager.instance.getItem(entityName: "Restaurant", id: id) as? Restaurant
     }
 }
 

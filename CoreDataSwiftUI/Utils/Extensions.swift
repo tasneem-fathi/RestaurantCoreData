@@ -7,8 +7,11 @@
 
 import Foundation
 
-extension Int {
-    func string(){
-        NSExpression(forKeyPath: String(self)).keyPath
+
+extension NSSet {
+    func toArray<S>(_ of: S.Type) -> [S] {
+        let array = self.map({$0 as! S})
+        return array
     }
+
 }

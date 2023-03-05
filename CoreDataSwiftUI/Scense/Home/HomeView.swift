@@ -30,10 +30,17 @@ struct HomeView: View {
                     DrinksView()
                 }
                 .modifier(HomeButton())
-                Spacer()
+
 
                 NavigationLink("Menu") {
                     MenuView()
+                }
+                .modifier(HomeButton())
+
+                Spacer()
+
+                NavigationLink("Add Meals") {
+                    MealsView()
                 }
                 .modifier(HomeButton())
 

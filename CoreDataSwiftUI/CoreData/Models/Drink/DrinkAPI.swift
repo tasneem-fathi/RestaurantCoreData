@@ -1,8 +1,8 @@
 //
-//  DrinkData.swift
+//  DrinkAPI.swift
 //  CoreDataSwiftUI
 //
-//  Created by tasneem .. on 27/02/2023.
+//  Created by tasneem .. on 03/03/2023.
 //
 
 import Foundation
@@ -17,43 +17,36 @@ protocol DrinkCoreAPI {
     func deleteDrink(item:DrinkModel)
 }
 
-struct DrinkModel: Identifiable {
-     var id:Int
-     var name:String
-     var image:String
-     var price:Double
-     var restaurant:RestaurantModel
-
-    var DrinkData : Drink? {
-        return CoreDataManager.instance.getItem(entityName: "Drink", id: id) as? Drink
-    }
-
-    static func toDrinkModel(item : Drink) -> DrinkModel{
-        return Self.init(id: Int(item.id) , name: item.name ?? "" , image: item.image ?? "",price: item.price, restaurant: RestaurantModel.toRestaurantModel(item: item.toRestaurant!))
-    }
-}
-
 class DrinkAPI : DrinkCoreAPI{
-
-
     let manager    = CoreDataManager.instance
     let entityName = "Drink"
+    private var drinks : [Drink] = []
+
+    init(){
+        drinks = manager.getItems(entityName: entityName) as? [Drink] ?? []
+
+    }
 
     func getDrinks() -> [DrinkModel]{
-        let list = manager.getItems(entityName: entityName) as? [Drink] ?? []
-        return  list.map { item in
+        return  drinks.map { item in
             DrinkModel.toDrinkModel(item: item)
         }
     }
 
     func getDrinks(restaurantId: Int) -> [DrinkModel] {
-        let list = manager.getItemsByRestaurantId(entityName: entityName, restaurantId: restaurantId) as? [Drink] ?? []
+        let list = drinks.filter { drink in
+            (drink.toRestaurant?.id ?? 0)  == restaurantId
+        }
+
         return  list.map { item in
             DrinkModel.toDrinkModel(item: item)
         }
     }
     func getDrink(id: Int) -> DrinkModel? {
-        guard let item = manager.getItem(entityName: entityName, id: id) as? Drink else {return nil}
+        let item = drinks.first { drink in
+            (drink.id) == id
+        }
+        guard let item = item else {return nil}
         return DrinkModel.toDrinkModel(item: item)
     }
 
@@ -63,23 +56,36 @@ class DrinkAPI : DrinkCoreAPI{
         newItem.name = item.name
         newItem.image = item.image
         newItem.price = item.price
-        item.restaurant.restaurantData?.addToToDrink(newItem)
+        RestaurantAPI.getRestaurant(id: item.id)?.addToToDrink(newItem)
        manager.save()
     }
 
     func updateDrink(item: DrinkModel) {
-        guard let newItem = manager.getItem(entityName: entityName, id: item.id) as? Drink else {return }
+        let newItem = drinks.first { drink in
+            (drink.id) == item.id
+        }
+        guard let newItem = newItem else {return}
         newItem.id = Int32(item.id)
         newItem.name = item.name
         newItem.image = item.image
         newItem.price = item.price
-        item.restaurant.restaurantData?.addToToDrink(newItem)
+        RestaurantAPI.getRestaurant(id: item.id)?.addToToDrink(newItem)
         manager.save()
     }
 
     func deleteDrink(item: DrinkModel){
-        guard let newItem = manager.getItem(entityName: entityName, id: item.id) as? Drink else {return }
+        let newItem = drinks.first { drink in
+            (drink.id) == item.id
+        }
+        guard let newItem = newItem else {return}
         manager.delete(newItem)
+    }
+}
+
+extension DrinkAPI{
+    static func getDrink(id:Int) -> Drink?{
+        return CoreDataManager.instance.getItem(entityName: "Drink", id: id) as? Drink
+
     }
 }
 

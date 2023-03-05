@@ -23,6 +23,7 @@ class MenuViewModel:ObservableObject{
 
     @Published var selectedRestaurant : RestaurantModel? = nil
     @Published var selectedCategory   : CategoryModel? = nil
+
     init(){
       fetchRestaurants()
       fetchCategories()

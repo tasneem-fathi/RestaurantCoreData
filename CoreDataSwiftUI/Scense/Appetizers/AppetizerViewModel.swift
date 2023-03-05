@@ -36,7 +36,7 @@ class AppetizersViewModel: ObservableObject{
 
     func addAppetizer(id:Int){
         let item = AppetizerModel(id:id, name: name, image: image, price: Double(price) ?? 0.0,  restaurant: restaurant!)
-        AppetizerApi.addAppetizer(item: item)
+      AppetizerApi.addAppetizer(item: item)
         fetchAppetizers()
     }
     func updateAppetizer(){
